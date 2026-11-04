@@ -2,6 +2,8 @@
 
 A complete online booking system for a beauty salon, with a public website, a client portal and a full back office. Built with **Laravel 13**, **Tailwind CSS 4**, **Alpine.js** and **SQLite**. The salon, its clients and all prices are fictional demo data.
 
+**Live demo: https://150-230-43-127.sslip.io** (sign in with the pre-filled demo account)
+
 ![Home page](docs/screenshots/home-hero.png)
 
 | | |
