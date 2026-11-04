@@ -13,8 +13,21 @@ class Appointment extends Model
 {
     protected $fillable = [
         'reference', 'client_id', 'staff_id', 'service_id', 'start_at', 'end_at', 'status', 'price', 'deposit',
-        'deposit_paid', 'promo_code', 'source', 'notes', 'cancel_reason',
+        'deposit_paid', 'promo_code', 'source', 'notes', 'cancel_reason', 'reminded_at',
     ];
+
+    /** An iCalendar file the client can add to their phone calendar. */
+    public function toIcs(): string
+    {
+        $fmt = fn ($d) => $d->copy()->utc()->format('Ymd\THis\Z');
+
+        return implode("\r\n", [
+            'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Lumiere Studio//Booking//EN', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT',
+            'UID:'.$this->reference.'@lumiere-studio.example', 'DTSTAMP:'.$fmt(now()), 'DTSTART:'.$fmt($this->start_at), 'DTEND:'.$fmt($this->end_at),
+            'SUMMARY:'.$this->service->name.' at Lumière Studio', 'DESCRIPTION:With '.$this->staff->name.'. Booking ref '.$this->reference.'.',
+            'LOCATION:'.str_replace(',', '\,', config('salon.address')), 'END:VEVENT', 'END:VCALENDAR',
+        ]);
+    }
 
     protected function casts(): array
     {
@@ -23,6 +36,7 @@ class Appointment extends Model
             'end_at' => 'datetime',
             'status' => AppointmentStatus::class,
             'deposit_paid' => 'boolean',
+            'reminded_at' => 'datetime',
         ];
     }
 

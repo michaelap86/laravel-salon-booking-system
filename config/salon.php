@@ -33,6 +33,12 @@ return [
         ['role' => 'Client', 'email' => 'client@lumiere.demo', 'hint' => 'The customer portal: bookings, rewards, reviews'],
     ],
 
+    // Telegram bot (optional). Set TELEGRAM_TOKEN to turn it on; TELEGRAM_ADMIN_CHAT_ID gets a message for every bot booking
+    'telegram' => [
+        'username' => env('TELEGRAM_BOT_USERNAME'),
+        'admin_chat' => env('TELEGRAM_ADMIN_CHAT_ID'),
+    ],
+
     // Regenerate the fictional data on the first request of each day
     'demo_auto_refresh' => env('DEMO_AUTO_REFRESH', true),
 ];

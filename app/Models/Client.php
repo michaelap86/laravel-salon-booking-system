@@ -9,7 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Client extends Model
 {
-    protected $fillable = ['user_id', 'name', 'email', 'phone', 'birthday', 'notes', 'vip', 'marketing_opt_in', 'source'];
+    protected $fillable = ['user_id', 'name', 'email', 'phone', 'birthday', 'notes', 'vip', 'marketing_opt_in', 'source', 'telegram_id'];
+
+    /** The client record for a Telegram user, created on their first booking. */
+    public static function forTelegram(int $telegramId, string $name): self
+    {
+        return static::query()->firstOrCreate(
+            ['telegram_id' => $telegramId],
+            ['name' => $name !== '' ? $name : 'Telegram guest', 'email' => 'tg'.$telegramId.'@telegram.lumiere.demo', 'source' => 'telegram'],
+        );
+    }
 
     protected function casts(): array
     {

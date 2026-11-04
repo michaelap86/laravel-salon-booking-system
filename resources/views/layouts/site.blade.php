@@ -68,6 +68,9 @@
                     <div class="flex items-baseline gap-2"><span class="font-serif text-3xl font-semibold text-white">Lumière</span><span class="text-[10px] font-semibold uppercase tracking-[0.32em] text-gold-400">Studio</span></div>
                     <p class="mt-4 max-w-xs text-sm leading-relaxed text-plum-200/80">{{ config('salon.tagline') }} A neighborhood salon where every visit feels a little bit special.</p>
                     <p class="mt-5 flex items-center gap-2 text-sm text-gold-300"><x-icon name="instagram" class="size-4" /> {{ config('salon.instagram') }}</p>
+                    @if (config('salon.telegram.username'))
+                        <p class="mt-2 text-sm"><a href="https://t.me/{{ config('salon.telegram.username') }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-gold-300 transition hover:text-white"><x-icon name="telegram" class="size-4" /> Book on Telegram</a></p>
+                    @endif
                 </div>
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-400">Explore</h3>

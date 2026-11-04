@@ -461,7 +461,7 @@ class DemoSeeder extends Seeder
             'reference' => $ref, 'client_id' => $clientId, 'staff_id' => $sid, 'service_id' => $svc['id'],
             'start_at' => $start->format('Y-m-d H:i:s'), 'end_at' => $end->format('Y-m-d H:i:s'), 'status' => $status,
             'price' => $price, 'deposit' => $deposit, 'deposit_paid' => $deposit > 0 && $status !== 'pending' || ($deposit > 0 && mt_rand(1, 100) <= 40),
-            'promo_code' => $promo[0] ?? null, 'source' => $this->pick(['web' => 62, 'phone' => 20, 'walk-in' => 10, 'admin' => 8]),
+            'promo_code' => $promo[0] ?? null, 'source' => $this->pick(['web' => 52, 'phone' => 18, 'telegram' => 12, 'walk-in' => 10, 'admin' => 8]),
             'notes' => $notes, 'cancel_reason' => $status === 'cancelled' ? ['Change of plans', 'Feeling unwell', 'Schedule conflict', 'Rescheduling'][mt_rand(0, 3)] : null,
             'created_at' => $created->format('Y-m-d H:i:s'), 'updated_at' => $created->format('Y-m-d H:i:s'),
         ];

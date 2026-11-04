@@ -93,13 +93,7 @@ class BookingController extends Controller
     public function ics(string $reference): Response
     {
         $a = $this->find($reference);
-        $fmt = fn ($d) => $d->copy()->utc()->format('Ymd\THis\Z');
-        $body = implode("\r\n", [
-            'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Lumiere Studio//Booking//EN', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT',
-            'UID:'.$a->reference.'@lumiere-studio.example', 'DTSTAMP:'.$fmt(now()), 'DTSTART:'.$fmt($a->start_at), 'DTEND:'.$fmt($a->end_at),
-            'SUMMARY:'.$a->service->name.' at Lumière Studio', 'DESCRIPTION:With '.$a->staff->name.'. Booking ref '.$a->reference.'.',
-            'LOCATION:'.str_replace(',', '\,', config('salon.address')), 'END:VEVENT', 'END:VCALENDAR',
-        ]);
+        $body = $a->toIcs();
 
         return response($body, 200, ['Content-Type' => 'text/calendar; charset=utf-8', 'Content-Disposition' => 'attachment; filename="appointment-'.$a->reference.'.ics"']);
     }

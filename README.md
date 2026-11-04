@@ -50,9 +50,36 @@ The data is regenerated on the first request of every day, so anything changed d
 - Role-based access (Admin, Manager, Stylist, Client) enforced on the server, users management and an activity log
 - Dark mode
 
+**Telegram bot**
+- The whole booking flow in a chat: category, service, stylist, a month calendar with only the open days, time slots, promo code and deposit
+- Uses the same availability engine and booking service as the website, so the rules are identical and bookings show up in the back office instantly (source "Telegram")
+- My bookings: details, reschedule, cancel (free cancellation window), add to calendar (`.ics`), rebook
+- Loyalty points and tier, reviews after a visit, message to the salon inbox, salon info and opening hours
+- Automatic reminders before an appointment, and an optional alert to the owner for every new booking
+
+## Telegram bot
+
+Try the live bot: [@lumiere_booking_demo_bot](https://t.me/lumiere_booking_demo_bot). Send `/start`, book a visit with the test card, then open the admin panel to see it arrive.
+
+The bot is part of the same Laravel app (built with [Nutgram](https://nutgram.dev)). It receives updates on a webhook at `/telegram/webhook`, with no session or CSRF, because Telegram is not a browser.
+
+To run your own:
+
+1. Create a bot with [@BotFather](https://t.me/BotFather) and copy the token.
+2. Set `TELEGRAM_TOKEN` (and optionally `TELEGRAM_BOT_USERNAME` and `TELEGRAM_ADMIN_CHAT_ID`, which you can find by sending `/id` to the bot) in `.env`.
+3. Register the menu and webhook with a public HTTPS address:
+
+```bash
+php artisan salon:bot-setup --url=https://your-domain.example/telegram/webhook
+```
+
+The Docker image does this on start when `TELEGRAM_TOKEN` is set and `APP_URL` is an https address. For local development, `php artisan nutgram:listen` runs the bot with long polling and no public address. Reminders run through the scheduler (`php artisan schedule:run` every minute).
+
+The payment step uses the demo gateway: the bot offers a test card that succeeds and one that is declined, and asks for no card details.
+
 ## Tech stack
 
-PHP 8.4 · Laravel 13 · SQLite (any Laravel database works) · Tailwind CSS 4 · Alpine.js · FullCalendar · ApexCharts · Vite · Docker (FrankenPHP)
+PHP 8.4 · Laravel 13 · Nutgram (Telegram) · SQLite (any Laravel database works) · Tailwind CSS 4 · Alpine.js · FullCalendar · ApexCharts · Vite · Docker (FrankenPHP)
 
 ## Run locally
 
@@ -85,6 +112,7 @@ On start, the container creates the database, seeds the demo data and serves the
 app/Services/Availability.php      works out bookable times
 app/Services/BookingService.php    booking, cancelling and rescheduling in one transaction
 app/Services/Payments/             payment gateway interface and the test gateway
+app/Telegram/                      Telegram bot: booking flow, account flow, reminders
 app/Http/Controllers/Admin/        back office
 database/seeders/DemoSeeder.php    fictional salon, team, clients, appointments and reviews
 app/Http/Middleware/DemoRefresh.php  daily demo reset
